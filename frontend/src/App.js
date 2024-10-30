@@ -5,7 +5,7 @@ import CreateTableButton from "./components/CreateTableButton";
 import UpdatePointButton from "./components/UpdatePointButton";
 import React, { useEffect, useState } from "react";
 
-const socket = io("http://ec2-34-195-221-35.compute-1.amazonaws.com:8000");
+const socket = io("http://ec2-34-195-221-35.compute-1.amazonaws.com");
 
 function App() {
   const [data, setData] = useState(null);
