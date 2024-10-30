@@ -1,8 +1,11 @@
 from flask import Flask, request
 from dotenv import load_dotenv
+from flask_cors import CORS
 import os
 import psycopg2
+
 app = Flask(__name__)
+CORS(app)  # This will allow all domains by default, you can specify origins
 
 load_dotenv()
 
@@ -35,3 +38,6 @@ def create_table():
         with conn.cursor() as cursor:
             cursor.execute(CREATE_TABLE)
     return {"message": "Table Created."}, 201
+
+if __name__ == "__main__":
+    app.run(port=8000)
