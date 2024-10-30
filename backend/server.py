@@ -68,4 +68,4 @@ def socket_test():
     return {"message": f"There are now {new_points} points"}, 201
 
 if __name__ == "__main__":
-    app.run(port=8000)
+    socketio.run(app, port=8000)
