@@ -11,10 +11,19 @@ function App() {
   const [data, setData] = useState(null);
 
   useEffect(() => {
+    socket.on("connect", () => {
+      console.log("Connected to socket server");
+    });
+
     socket.on("point_update", (data) => {
+      console.log("Received point update:", data);
       setData(data);
     });
-  });
+
+    return () => {
+      socket.off("point_update");
+    };
+  }, []);
 
   return (
     <div className="App">
