@@ -12,4 +12,4 @@ export FLASK_RUN_PORT=8000
 # Set the FLASK_APP environment variable
 export FLASK_APP=server.py
 
-echo "Environment setup complete."
+echo "Environment setup complete!"
