@@ -15,6 +15,26 @@ function App() {
       console.log("Connected to socket server");
     });
 
+    socket.on("connect_error", (err) => {
+      console.error("Connection error:", err);
+    });
+
+    socket.on("connect_timeout", () => {
+      console.error("Connection timed out");
+    });
+
+    socket.on("reconnect_attempt", () => {
+      console.log("Attempting to reconnect");
+    });
+
+    socket.on("reconnect_error", (err) => {
+      console.error("Reconnection error:", err);
+    });
+
+    socket.on("reconnect_failed", () => {
+      console.error("Reconnection failed");
+    });
+
     socket.on("point_update", (data) => {
       console.log("Received point update:", data);
       setData(data);
