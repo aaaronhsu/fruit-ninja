@@ -46,6 +46,16 @@ def update_lives(game_id, lives):
             """, (lives, game_id))
 
 def end_game(game_id):
+    # if game_id is None, end all games
+    if game_id is None:
+        with conn:
+            with conn.cursor() as cursor:
+                cursor.execute("""
+                    UPDATE games
+                    SET end_time = CURRENT_TIMESTAMP
+                    WHERE end_time IS NULL;
+                """)
+        return
     with conn:
         with conn.cursor() as cursor:
             cursor.execute("""
