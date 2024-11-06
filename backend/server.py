@@ -47,7 +47,7 @@ def game_events():
             }
 
             # process event based on type
-            print(event['type'])
+            print(event['type'], type(event['type']))
             match event['type']:
                 case GameEvent.FRUIT_SLICED:
                     print(event['metadata']['points'])
