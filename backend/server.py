@@ -24,7 +24,8 @@ def init_tables():
 @app.post("/api/reset_game_table")
 def reset_tables():
     dao.reset_game_table()
-    return {"message": "Game table dropped."}, 201
+    dao.init_game_table()
+    return {"message": "Game table reset."}, 201
 
 @app.post("/api/events")
 def game_events():

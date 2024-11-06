@@ -11,7 +11,7 @@ def test_init_game_table(client):
 def test_reset_game_table(client):
     response = client.post('/api/reset_game_table')
     assert response.status_code == 201
-    assert response.get_json() == {"message": "Game table dropped."}
+    assert response.get_json() == {"message": "Game table reset."}
 
 def test_game_events(client):
     # Test with valid event data
