@@ -27,23 +27,24 @@ def reset_game_table():
             cursor.execute("DROP TABLE games;")
 
 # ---------------------- EVENT LOGIC ----------------------
-def update_points(game_id, points):
+def update_points(game_id, points_diff):
     with conn:
         with conn.cursor() as cursor:
             cursor.execute("""
                 UPDATE games
-                SET points = %s
+                SET points = points + %s
                 WHERE id = %s;
-            """, (points, game_id))
+            """, (points_diff, game_id))
 
-def update_lives(game_id, lives):
+def update_lives(game_id, lives_diff):
     with conn:
         with conn.cursor() as cursor:
             cursor.execute("""
                 UPDATE games
-                SET lives = %s
+                SET lives = lives + %s
                 WHERE id = %s;
-            """, (lives, game_id))
+            """, (lives_diff, game_id))
+
 
 def end_game(game_id):
     # if game_id is None, end all games
