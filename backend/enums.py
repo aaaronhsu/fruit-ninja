@@ -1,8 +1,8 @@
 import enum
 
 
-class GameEvent(enum.Enum):
-    FRUIT_SLICED = 'fruit_sliced'
-    BOMB_SLICED = 'bomb_sliced'
-    GAME_START = 'game_start'
-    GAME_END = 'game_end'
+class GameEvent(str, enum.Enum):
+    FRUIT_SLICED = 'FRUIT_SLICED'
+    BOMB_SLICED = 'BOMB_SLICED'
+    GAME_START = 'GAME_START'
+    GAME_END = 'GAME_END'

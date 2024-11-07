@@ -47,11 +47,12 @@ def game_events():
                 "metadata": event.get('metadata', {})
             }
 
+            # process event based on type
             match event['type']:
                 case GameEvent.FRUIT_SLICED:
-                    dao.update_points(event['game_id'], 1)
+                    dao.update_points(event['game_id'], event['metadata']['points'])
                 case GameEvent.BOMB_SLICED:
-                    dao.update_lives(event['game_id'], -1)
+                    dao.update_lives(event['game_id'], -event['metadata']['damage'])
                 case GameEvent.GAME_END:
                     dao.end_game(event['game_id'])
 
