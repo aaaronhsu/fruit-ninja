@@ -49,9 +49,9 @@ def game_events():
 
             match event['type']:
                 case GameEvent.FRUIT_SLICED:
-                    dao.update_points(event['game_id'], 1)
+                    dao.update_points(event['game_id'], event['metadata'].get('points', 10))
                 case GameEvent.BOMB_SLICED:
-                    dao.update_lives(event['game_id'], -1)
+                    dao.update_lives(event['game_id'], event['metadata'].get('lives', -1))
                 case GameEvent.GAME_END:
                     dao.end_game(event['game_id'])
 
