@@ -47,13 +47,10 @@ def game_events():
                 "metadata": event.get('metadata', {})
             }
 
-            print(type(event['type']), event['type'])
             match event['type']:
                 case GameEvent.FRUIT_SLICED:
-                    print("fruit", event['metadata'].get('points', 10))
                     dao.update_points(event['game_id'], event['metadata'].get('points', 10))
                 case GameEvent.BOMB_SLICED:
-                    print("bomb", event['metadata'].get('lives', -1))
                     dao.update_lives(event['game_id'], event['metadata'].get('lives', -1))
                 case GameEvent.GAME_END:
                     dao.end_game(event['game_id'])
