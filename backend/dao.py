@@ -24,7 +24,7 @@ def init_game_table():
 def reset_game_table():
     with conn:
         with conn.cursor() as cursor:
-            cursor.execute("DROP TABLE games;")
+            cursor.execute("DROP TABLE IF EXISTS games;")
 
 # ---------------------- EVENT LOGIC ----------------------
 def update_points(game_id, points):
