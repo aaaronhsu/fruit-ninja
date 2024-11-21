@@ -9,22 +9,13 @@ class Coordinate:
 
     def convert_xy_to_linear(self) -> int:
         # TODO: converts coordinate to LED position
-
-        # idea is that we have a 20 x 30 grid of LEDs 
-        # 0-29
-        # 59-30
-        # 60-89
-        # 118-90
-        # 119-148
-        # 178-149
-        # 179-
-
-        #coordinates occupy a 200 x 300 space, as if it is a 2d array 
-        #0  .......... 299
-        #   ..........
-        #   ..........
-        #199 .......... 
-        ...
+        x = self.x
+        y = self.y
+        row_starting_val = y // 10 * 30
+        col_val = x // 10
+        if y // 10 % 2 == 1:
+            return int(row_starting_val + 30 - col_val)
+        return int(row_starting_val + col_val)
 
 
 class Color:

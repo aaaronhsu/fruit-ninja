@@ -56,17 +56,22 @@ class Driver:
 
 
 if __name__ == "__main__":
-    # game_driver = Driver()
-    # # TODO: use Driver class to run the game
-    # game_driver.blocking_start_game()
-    game: GameMetadata = GameMetadata(
-        game_id=-1,
-        num_lives=10,
-        total_game_length=100,
-        game_type=0
-    )
+    game_driver = Driver()
+    # TODO: use Driver class to run the game
 
-    game.led_strip[100] = (255, 255, 255)
-    # while 1:
-    #     pos: Coordinate = hardware_io.fetch_cursor()
-    #     print(pos.x, pos.y)
+    game_driver.blocking_start_game()
+
+    while True:
+        game_driver.run_game()
+
+    # game: GameMetadata = GameMetadata(
+    #     game_id=-1,
+    #     num_lives=10,
+    #     total_game_length=100,
+    #     game_type=0
+    # )
+
+    # game.led_strip[100] = (255, 255, 255)
+    # # while 1:
+    # #     pos: Coordinate = hardware_io.fetch_cursor()
+    # #     print(pos.x, pos.y)
