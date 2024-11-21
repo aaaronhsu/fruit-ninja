@@ -39,10 +39,10 @@ class Entity(ABC):
 
                 if inEntity:
                     led_position = Coordinate(x_coord, y_coord).convert_xy_to_linear()
-                    leds[led_position] = self.color                       
+                    leds[led_position] = self.color
         return leds
 
-    def next_position(self): 
+    def next_position(self):
         self.position.x += self.x_velocity
         self.position.y += self.y_velocity
 
@@ -58,7 +58,7 @@ class Fruit(Entity):
         self.point_value = point_value
         self.color = ColorEnum.GREEN.value
 
-    def handle_slice(self) -> list[Fruit]:
+    def handle_slice(self) -> list:
         #TODO: when sliced, returns two half fruits with opposite velocities
         ...
 
