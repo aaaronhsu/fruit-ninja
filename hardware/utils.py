@@ -11,7 +11,6 @@ class Coordinate:
         # TODO: converts coordinate to LED position
         ...
 
-
 class Color:
     r: int
     g: int

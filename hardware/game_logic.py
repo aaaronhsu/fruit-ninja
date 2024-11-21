@@ -8,11 +8,9 @@ from utils import Coordinate
 from network import Event, GameEvent
 
 def spawn_fruit() -> Fruit:
-    # TODO: randomly generate a fruit and return it
     return Fruit(10)
 
 def spawn_bomb() -> Bomb:
-    # TODO: randomly generate a bomb and return it
     return Bomb(1)
 
 def handle_possible_collision(object: Entity, cursor: Coordinate) -> Event | None:
@@ -35,6 +33,11 @@ def handle_possible_collision(object: Entity, cursor: Coordinate) -> Event | Non
         }
         return Event(GameEvent.BOMB_SLICED, metadata)
 
+def despawn_fallen_entities(current_state: GameMetadata) -> None:
+    current_state.fruits = [fruit for fruit in current_state.fruits 
+        if not (fruit.position.y < -40 and fruit.y_velocity < 0)]
+    current_state.bombs = [bomb for bomb in current_state.bombs 
+        if not (bomb.position.y < -40 and bomb.y_velocity < 0)]
 
 def calculate_next_game_state(current_state: GameMetadata, cursor: Coordinate) -> GameMetadata:
     next_game_state: GameMetadata = copy.deepcopy(current_state)
@@ -47,6 +50,8 @@ def calculate_next_game_state(current_state: GameMetadata, cursor: Coordinate) -
         sliced_event = handle_possible_collision(entity, cursor)
         if sliced_event:
             next_game_state.events_to_post.append(sliced_event)
+    
+    despawn_fallen_entities(next_game_state)
 
     # spawn new entities
     if random.random() < 0.02:

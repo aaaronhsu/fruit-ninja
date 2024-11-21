@@ -2,8 +2,17 @@ from abc import ABC, abstractmethod
 from typing import Dict
 
 from utils import Coordinate, Color, ColorEnum
+import random
 
 GRAVITY = -1
+MAX_X = 300
+MAX_Y = 200
+MAX_RADIUS_PERCENT = 0.10;
+MIN_RADIUS_PERCENT = 0.05;
+MAX_X_VELOCITY = 4
+MIN_X_VELOCITY = 1
+MAX_Y_VELOCITY = 4
+MIN_Y_VELOCITY = 1
 
 class Entity(ABC):
     position: Coordinate
@@ -13,20 +22,27 @@ class Entity(ABC):
     color: Color
 
     def __init__(self) -> None:
-        # TODO: Randomize values
-        position = Coordinate(0, 0)
-        x_velocity = 5
-        y_velocity = 3
-        radius = 1
+        self.position = Coordinate(random.random()*MAX_X, -20)
+        on_left_side = self.position.x < MAX_X/2
+        self.x_velocity = (1 if on_left_side else -1) * (random.random()*MAX_X_VELOCITY + MIN_X_VELOCITY)
+        self.y_velocity = random.random()*MAX_Y_VELOCITY + MIN_Y_VELOCITY
+        self.radius = random.random()*(MAX_RADIUS_PERCENT * MAX_X) + (MIN_RADIUS_PERCENT*MAX_X)
+        self.color = ColorEnum.MAGENTA.value
 
-    def map_to_display() -> Dict[int, Color]:
-        # TODO:
-        # create a dictionary that maps the current entity to LED positions and Colors
-        # fetch the LED position from Coordinate.convert_xy_to_linear()
-        # use ColorEnum.RED.value, ColorEnum.GREENvalue, etc. for default pixel colors
-        ...
+    def map_to_display(self) -> Dict[int, Color]:
+        leds: Dict[int, Color] = dict()
 
-    def next_position(self):
+        for y_coord in range(self.position.y - self.radius, self.position.y + self.radius, 10):
+            for x_coord in range(self.position.x - self.radius, self.position.x + self.radius, 10):
+                distance: float = ((self.position.x - x_coord)**2 + (self.position.y - y_coord)**2)**(0.5)
+                inEntity = distance <= self.radius
+
+                if inEntity:
+                    led_position = Coordinate(x_coord, y_coord).convert_xy_to_linear()
+                    leds[led_position] = self.color                       
+        return leds
+
+    def next_position(self): 
         self.position.x += self.x_velocity
         self.position.y += self.y_velocity
 
@@ -41,6 +57,10 @@ class Fruit(Entity):
         super().__init__()
         self.point_value = point_value
         self.color = ColorEnum.GREEN.value
+
+    def handle_slice(self) -> list[Fruit]:
+        #TODO: when sliced, returns two half fruits with opposite velocities
+        ...
 
 class Bomb(Entity):
     life_penalty: int
