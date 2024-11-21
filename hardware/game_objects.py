@@ -4,7 +4,7 @@ from typing import Dict
 from utils import Coordinate, Color, ColorEnum
 import random
 
-GRAVITY = -30
+GRAVITY = -2
 MAX_X = 300
 MAX_Y = 200
 MAX_RADIUS_PERCENT = 0.05
