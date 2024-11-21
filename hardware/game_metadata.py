@@ -1,6 +1,5 @@
 from datetime import datetime
 from game_objects import Fruit, Bomb
-from network import Event
 from utils import Coordinate
 
 # import board
@@ -21,7 +20,7 @@ class GameMetadata:
 
     # LED_STRIP: neopixel.NeoPixel
 
-    events_to_post: list[Event]
+    events_to_post: list
 
     def __init__(self, game_id: int, num_lives: int, total_game_length: int, game_type: int) -> None:
         self.fruits = []
