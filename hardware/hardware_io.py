@@ -16,7 +16,7 @@ def render(game_state: GameMetadata, cursor: Coordinate):
         leds_to_render.update(entity.map_to_display())
 
     # add white cursor
-    leds_to_render.update({cursor.convert_xy_to_linear(): Color(255, 255, 255)})
+    # leds_to_render.update({cursor.convert_xy_to_linear(): Color(255, 255, 255)})
 
     game_state.led_strip.fill((0, 0, 0)) # flush the LED strip
     for (led_num, color) in leds_to_render.items():
