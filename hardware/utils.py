@@ -37,7 +37,7 @@ class Color:
         self.g = green
         self.b = blue
 
-    def apply_to_led_strip(self, led_num: int, pixels) -> int:
+    def apply_to_led_strip(self, led_num: int, pixels) -> None:
         # TODO: applies color to led_num to pixels
         pixels[led_num] = (self.r, self.g, self.b)
 

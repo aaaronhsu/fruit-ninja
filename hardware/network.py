@@ -28,7 +28,7 @@ class Event:
         self.metadata = metadata
 
     @staticmethod
-    def post_events(events: list[Event]):
+    def post_events(events: list):
         # Transform the events list into the expected payload format
         payload = {
             "events": [
