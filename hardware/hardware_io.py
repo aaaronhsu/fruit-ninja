@@ -18,11 +18,11 @@ def render(game_state: GameMetadata, cursor: Coordinate):
     # add white cursor
     leds_to_render.update({cursor.convert_xy_to_linear(): Color(255, 255, 255)})
 
-    game_state.LED_STRIP.fill((0, 0, 0)) # flush the LED strip
+    game_state.led_strip.fill((0, 0, 0)) # flush the LED strip
     for (led_num, color) in leds_to_render.items():
-        color.apply_to_led_strip(led_num, game_state.LED_STRIP)
+        color.apply_to_led_strip(led_num, game_state.led_strip)
 
-    game_state.LED_STRIP.show()
+    game_state.led_strip.show()
 
 def fetch_cursor() -> Coordinate:
     # Initialize Pixy2 if not already initialized
