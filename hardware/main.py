@@ -46,7 +46,6 @@ class Driver:
             current_state=self.current_game,
             cursor=cursor_position
         )
-        time.sleep(1)
 
         # if self.should_render_frame():
         # if True:
