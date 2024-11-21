@@ -22,7 +22,7 @@ class Driver:
         self.last_render_time = 0.0
 
     def blocking_start_game(self) -> None:
-        while not (current_game := fetch_current_game()):
+        while not (self.current_game := fetch_current_game()):
             time.sleep(1)
         self.last_render_time = time.time()  # Initialize render timing
 
