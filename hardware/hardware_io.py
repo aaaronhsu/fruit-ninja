@@ -11,9 +11,9 @@ from utils import Color, Coordinate, Color
 def render(game_state: GameMetadata, cursor: Coordinate):
     leds_to_render: Dict[int, Color] = dict()
 
-    # # iterate through all entities and map them to LED positions
-    # for entity in game_state.fruits + game_state.bombs:
-    #     leds_to_render.update(entity.map_to_display())
+    # iterate through all entities and map them to LED positions
+    for entity in game_state.fruits + game_state.bombs:
+        leds_to_render.update(entity.map_to_display())
 
     # add white cursor
     leds_to_render.update({cursor.convert_xy_to_linear(): Color(255, 255, 255)})
