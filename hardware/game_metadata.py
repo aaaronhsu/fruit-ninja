@@ -3,6 +3,9 @@ from game_objects import Fruit, Bomb
 from network import Event
 from utils import Coordinate
 
+# import board
+# import neopixel
+
 class GameMetadata:
     fruits: list[Fruit]
     bombs: list[Bomb]
@@ -15,6 +18,8 @@ class GameMetadata:
     num_points: int
     num_lives: int
     game_type: int
+
+    # LED_STRIP: neopixel.NeoPixel
 
     events_to_post: list[Event]
 
@@ -30,6 +35,8 @@ class GameMetadata:
         self.num_points = 0
         self.num_lives = num_lives
         self.game_type = game_type
+
+        # self.LED_STRIP = neopixel.NeoPixel(board.D18, 600)
 
 
     def print_game_state():
