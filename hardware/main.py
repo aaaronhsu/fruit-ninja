@@ -46,10 +46,11 @@ class Driver:
             current_state=self.current_game,
             cursor=cursor_position
         )
+        time.sleep(1)
 
         # if self.should_render_frame():
-        if True:
-            hardware_io.render(self.current_game, cursor_position)
+        # if True:
+        #     hardware_io.render(self.current_game, cursor_position)
 
         return True # this should be False if the game is over
 
