@@ -17,8 +17,8 @@ def spawn_bomb() -> Bomb:
 
 def handle_possible_collision(object: Entity, cursor: Coordinate) -> Event | None:
     def is_collision() -> bool:
-        # TODO: return True if the object has collided with the cursor
-        ...
+        distance: float = ((object.position.x - cursor.x)**2 + (object.position.y - cursor.y)**2)**(0.5)
+        return distance < object.radius
 
     if not is_collision():
         return None
