@@ -7,8 +7,8 @@ import random
 GRAVITY = -1
 MAX_X = 300
 MAX_Y = 200
-MAX_RADIUS_PERCENT = 0.10;
-MIN_RADIUS_PERCENT = 0.05;
+MAX_RADIUS_PERCENT = 0.10
+MIN_RADIUS_PERCENT = 0.05
 MAX_X_VELOCITY = 4
 MIN_X_VELOCITY = 1
 MAX_Y_VELOCITY = 4
@@ -18,7 +18,7 @@ class Entity(ABC):
     position: Coordinate
     x_velocity: float
     y_velocity: float
-    radius: int
+    radius: float
     color: Color
 
     def __init__(self) -> None:
@@ -26,14 +26,14 @@ class Entity(ABC):
         on_left_side = self.position.x < MAX_X/2
         self.x_velocity = (1 if on_left_side else -1) * (random.random()*MAX_X_VELOCITY + MIN_X_VELOCITY)
         self.y_velocity = random.random()*MAX_Y_VELOCITY + MIN_Y_VELOCITY
-        self.radius = random.random()*(MAX_RADIUS_PERCENT * MAX_X) + (MIN_RADIUS_PERCENT*MAX_X)
+        self.radius = random.random()*(MAX_RADIUS_PERCENT * MAX_X) + (MIN_RADIUS_PERCENT * MAX_X)
         self.color = ColorEnum.MAGENTA.value
 
     def map_to_display(self) -> Dict[int, Color]:
         leds: Dict[int, Color] = dict()
 
-        for y_coord in range(self.position.y - self.radius, self.position.y + self.radius, 10):
-            for x_coord in range(self.position.x - self.radius, self.position.x + self.radius, 10):
+        for y_coord in range(int(self.position.y - self.radius), int(self.position.y + self.radius), 10):
+            for x_coord in range(int(self.position.x - self.radius), int(self.position.x + self.radius), 10):
                 distance: float = ((self.position.x - x_coord)**2 + (self.position.y - y_coord)**2)**(0.5)
                 inEntity = distance <= self.radius
 
