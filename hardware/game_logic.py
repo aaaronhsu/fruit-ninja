@@ -34,9 +34,9 @@ def handle_possible_collision(object: Entity, cursor: Coordinate) -> Event | Non
         return Event(GameEvent.BOMB_SLICED, metadata)
 
 def despawn_fallen_entities(current_state: GameMetadata) -> None:
-    current_state.fruits = [fruit for fruit in current_state.fruits 
+    current_state.fruits = [fruit for fruit in current_state.fruits
         if not (fruit.position.y < -40 and fruit.y_velocity < 0)]
-    current_state.bombs = [bomb for bomb in current_state.bombs 
+    current_state.bombs = [bomb for bomb in current_state.bombs
         if not (bomb.position.y < -40 and bomb.y_velocity < 0)]
 
 def calculate_next_game_state(current_state: GameMetadata, cursor: Coordinate) -> GameMetadata:
@@ -50,8 +50,8 @@ def calculate_next_game_state(current_state: GameMetadata, cursor: Coordinate) -
         sliced_event = handle_possible_collision(entity, cursor)
         if sliced_event:
             next_game_state.events_to_post.append(sliced_event)
-    
-    despawn_fallen_entities(next_game_state)
+
+    # despawn_fallen_entities(next_game_state)
 
     # spawn new entities
     if random.random() < 0.02:
