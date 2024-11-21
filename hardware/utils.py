@@ -8,14 +8,26 @@ class Coordinate:
     y: float
 
     def convert_xy_to_linear(self) -> int:
-        # TODO: converts coordinate to LED position
-        x = self.x
-        y = self.y
-        row_starting_val = y // 10 * 30
-        col_val = x // 10
-        if y // 10 % 2 == 1:
-            return int(row_starting_val + 30 - col_val)
-        return int(row_starting_val + col_val)
+        # First, map the x,y coordinates to grid positions
+        # Map x from (0,300) to (0,29)
+        grid_x = int((self.x / 300) * 29)
+        # Map y from (0,200) to (0,19)
+        grid_y = int((self.y / 200) * 19)
+
+        # Clamp values to ensure they're within bounds
+        grid_x = max(0, min(29, grid_x))
+        grid_y = max(0, min(19, grid_y))
+
+        # For even rows (0,2,4...), LEDs go left to right
+        # For odd rows (1,3,5...), LEDs go right to left
+        if grid_y % 2 == 0:
+            # Even row - left to right
+            led_position = grid_y * 30 + grid_x
+        else:
+            # Odd row - right to left
+            led_position = grid_y * 30 + (29 - grid_x)
+
+        return led_position
 
 
 class Color:
