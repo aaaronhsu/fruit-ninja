@@ -4,15 +4,15 @@ from typing import Dict
 from utils import Coordinate, Color, ColorEnum
 import random
 
-GRAVITY = -2
+GRAVITY = -5
 MAX_X = 300
 MAX_Y = 200
 MAX_RADIUS_PERCENT = 0.05
 MIN_RADIUS_PERCENT = 0.01
 MAX_X_VELOCITY = 4
 MIN_X_VELOCITY = 1
-MAX_Y_VELOCITY = 50
-MIN_Y_VELOCITY = 30
+MAX_Y_VELOCITY = 25
+MIN_Y_VELOCITY = 15
 
 class Entity(ABC):
     position: Coordinate
