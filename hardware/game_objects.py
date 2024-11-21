@@ -26,8 +26,7 @@ class Entity(ABC):
         on_left_side = self.position.x < MAX_X/2
         self.x_velocity = (1 if on_left_side else -1) * (random.random()*MAX_X_VELOCITY + MIN_X_VELOCITY)
         self.y_velocity = random.random()*MAX_Y_VELOCITY + MIN_Y_VELOCITY
-        # self.radius = random.random()*(MAX_RADIUS_PERCENT * MAX_X) + (MIN_RADIUS_PERCENT * MAX_X)
-        self.radius = 1
+        self.radius = random.random()*(MAX_RADIUS_PERCENT * MAX_X) + (MIN_RADIUS_PERCENT * MAX_X)
         self.color = ColorEnum.MAGENTA.value
 
     def map_to_display(self) -> Dict[int, Color]:
