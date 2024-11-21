@@ -50,4 +50,4 @@ def fetch_cursor() -> Coordinate:
     else:
         # Return a default coordinate or handle no detection case
         # You might want to modify this based on your needs
-        return Coordinate(0.5, 0.5)  # Center position as default
+        return Coordinate(-500, -500)  # Center position as default
