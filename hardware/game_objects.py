@@ -48,6 +48,8 @@ class Entity(ABC):
 
         self.y_velocity += GRAVITY
 
+        print("fruit at", self.position.x, self.position.y, "velocity", self.y_velocity)
+
 
 class Fruit(Entity):
     point_value: int
