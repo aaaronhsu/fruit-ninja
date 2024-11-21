@@ -66,7 +66,7 @@ if __name__ == "__main__":
         game_type=0
     )
 
-    game.LED_STRIP[100] = (255, 255, 255)
+    game.led_strip[100] = (255, 255, 255)
     # while 1:
     #     pos: Coordinate = hardware_io.fetch_cursor()
     #     print(pos.x, pos.y)
