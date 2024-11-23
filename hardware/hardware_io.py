@@ -1,7 +1,7 @@
-# from __future__ import print_function
-# import pixy
-# from ctypes import *
-# from pixy import *
+from __future__ import print_function
+import pixy
+from ctypes import *
+from pixy import *
 
 from typing import Dict
 
@@ -14,6 +14,7 @@ def render(game_state: GameMetadata, cursor: Coordinate, debug=False):
         game_state.print_game_state(render_radius=True)
         return
     leds_to_render: Dict[int, Color] = dict()
+    print(f"rendering frame {game_state.frame_num}")
 
     # add cursor path
     for cursor in game_state.cursors:

@@ -13,7 +13,7 @@ import network
 
 FPS: int = 10
 FRAME_TIME: float = 1.0 / FPS  # Time per frame in seconds
-DEBUG = True
+DEBUG = False
 
 
 class Driver:
