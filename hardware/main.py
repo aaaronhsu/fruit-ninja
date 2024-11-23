@@ -2,7 +2,7 @@ from typing import Tuple
 from datetime import datetime
 import time
 
-import hardware_io
+# import hardware_io
 import game_logic
 import network
 import utils
@@ -11,7 +11,7 @@ from game_metadata import GameMetadata
 from utils import Coordinate
 from network import fetch_current_game
 
-FPS: int = 10
+FPS: int = 8
 FRAME_TIME: float = 1.0 / FPS  # Time per frame in seconds
 
 class Driver:
@@ -40,14 +40,17 @@ class Driver:
     def run_game(self) -> bool: # returns False if the game is over
         # TODO: fetch the current_live_game and check that this corresponds to the current game data
 
-        cursor_position: Coordinate = hardware_io.fetch_cursor()
+        # cursor_position: Coordinate = hardware_io.fetch_cursor()
 
-        self.current_game = game_logic.calculate_next_game_state(
-            current_state=self.current_game,
-            cursor=cursor_position
-        )
 
-        # if self.should_render_frame():
+
+        if self.should_render_frame():
+            self.current_game = game_logic.calculate_next_game_state(
+                current_state=self.current_game,
+                # cursor=cursor_position
+                cursor=Coordinate(0, 0)
+            )
+            self.current_game.print_game_state(render_radius=True)
         # if True:
         #     hardware_io.render(self.current_game, cursor_position)
 

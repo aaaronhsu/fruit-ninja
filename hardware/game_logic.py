@@ -54,11 +54,13 @@ def calculate_next_game_state(current_state: GameMetadata, cursor: Coordinate) -
     # despawn_fallen_entities(next_game_state)
 
     # spawn new entities
-    if random.random() < 0.02:
+    if random.random() < 0.08:
         new_fruit = spawn_fruit()
         next_game_state.fruits.append(new_fruit)
-    if random.random() < 0.005:
+    if random.random() < 0.01:
         new_bomb = spawn_bomb()
         next_game_state.bombs.append(new_bomb)
+
+    next_game_state.frame_num += 1
 
     return next_game_state

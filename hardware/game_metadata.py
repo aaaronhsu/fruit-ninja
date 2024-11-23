@@ -2,8 +2,8 @@ from datetime import datetime
 from game_objects import Fruit, Bomb
 from utils import Coordinate
 
-import board
-import neopixel
+# import board
+# import neopixel
 
 class GameMetadata:
     fruits: list[Fruit]
@@ -29,14 +29,81 @@ class GameMetadata:
         self.game_id = game_id
         self.total_game_length = total_game_length
         self.last_render_timestamp = datetime.now().timestamp()
-        self.fps = 10
+        self.fps = 8
         self.num_points = 0
         self.num_lives = num_lives
         self.game_type = game_type
 
-        self.led_strip = neopixel.NeoPixel(board.D18, 600)
+        self.events_to_post = []
 
+        # self.led_strip = neopixel.NeoPixel(board.D18, 600)
 
-    def print_game_state():
-        # TODO: print the LED representation of fruits and bombs for debugging
-        ...
+    def print_game_state(self, render_radius: bool = False):
+        """
+        Prints ASCII representation of the game state for debugging
+        Args:
+            render_radius: If True, renders the full radius of fruits/bombs
+        """
+        # Create a 30x20 grid to match LED layout (x = 30 wide, y = 20 high)
+        grid = [[' ' for x in range(30)] for y in range(20)]
+
+        # Map fruits to grid
+        for fruit in self.fruits:
+            if render_radius:
+                # Convert radius to grid units
+                grid_radius = int((fruit.radius / 300) * 29)
+                center_x = int((fruit.position.x / 300) * 29)
+                center_y = int((fruit.position.y / 200) * 19)
+
+                # Fill in all points within radius
+                for dx in range(-grid_radius, grid_radius + 1):
+                    for dy in range(-grid_radius, grid_radius + 1):
+                        grid_x = center_x + dx
+                        grid_y = center_y + dy
+
+                        # Check if point is within circular radius and grid bounds
+                        if (dx**2 + dy**2 <= grid_radius**2 and
+                            0 <= grid_x < 30 and
+                            0 <= grid_y < 20):
+                            grid[19-grid_y][grid_x] = 'F'  # Invert y for display
+            else:
+                # Just render center point
+                grid_x = int((fruit.position.x / 300) * 29)
+                grid_y = int((fruit.position.y / 200) * 19)
+                if 0 <= grid_x < 30 and 0 <= grid_y < 20:
+                    grid[19-grid_y][grid_x] = 'F'  # Invert y for display
+
+        # Map bombs to grid
+        for bomb in self.bombs:
+            if render_radius:
+                grid_radius = int((bomb.radius / 300) * 29)
+                center_x = int((bomb.position.x / 300) * 29)
+                center_y = int((bomb.position.y / 200) * 19)
+
+                for dx in range(-grid_radius, grid_radius + 1):
+                    for dy in range(-grid_radius, grid_radius + 1):
+                        grid_x = center_x + dx
+                        grid_y = center_y + dy
+
+                        if (dx**2 + dy**2 <= grid_radius**2 and
+                            0 <= grid_x < 30 and
+                            0 <= grid_y < 20):
+                            grid[19-grid_y][grid_x] = 'B'  # Invert y for display
+            else:
+                grid_x = int((bomb.position.x / 300) * 29)
+                grid_y = int((bomb.position.y / 200) * 19)
+                if 0 <= grid_x < 30 and 0 <= grid_y < 20:
+                    grid[19-grid_y][grid_x] = 'B'  # Invert y for display
+
+        # Print game stats
+        print(f"\nGame ID: {self.game_id}")
+        print(f"Lives: {self.num_lives}")
+        print(f"Points: {self.num_points}")
+        print(f"Frame: {self.frame_num}")
+        print(f"Fruits: {len(self.fruits)}, Bombs: {len(self.bombs)}\n")
+
+        # Print grid with border
+        print("+" + "-" * 30 + "+")
+        for row in grid:
+            print("|" + "".join(row) + "|")
+        print("+" + "-" * 30 + "+")

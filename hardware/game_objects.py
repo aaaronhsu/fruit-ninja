@@ -9,10 +9,10 @@ MAX_X = 300
 MAX_Y = 200
 MAX_RADIUS_PERCENT = 0.05
 MIN_RADIUS_PERCENT = 0.01
-MAX_X_VELOCITY = 4
-MIN_X_VELOCITY = 1
+MAX_X_VELOCITY = 8
+MIN_X_VELOCITY = 3
 MAX_Y_VELOCITY = 25
-MIN_Y_VELOCITY = 15
+MIN_Y_VELOCITY = 20
 
 class Entity(ABC):
     position: Coordinate
@@ -27,7 +27,7 @@ class Entity(ABC):
         self.x_velocity = (1 if on_left_side else -1) * (random.random()*MAX_X_VELOCITY + MIN_X_VELOCITY)
         self.y_velocity = random.random()*MAX_Y_VELOCITY + MIN_Y_VELOCITY
         # self.radius = random.random()*(MAX_RADIUS_PERCENT * MAX_X) + (MIN_RADIUS_PERCENT * MAX_X)
-        self.radius = 10
+        self.radius = 20
         self.color = ColorEnum.MAGENTA.value
 
     def map_to_display(self) -> Dict[int, Color]:
@@ -49,7 +49,7 @@ class Entity(ABC):
 
         self.y_velocity += GRAVITY
 
-        print("fruit at", self.position.x, self.position.y, "velocity", self.y_velocity)
+        # print("fruit at", self.position.x, self.position.y, "velocity", self.y_velocity)
 
 
 class Fruit(Entity):
