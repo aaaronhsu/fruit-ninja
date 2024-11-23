@@ -93,6 +93,9 @@ class Driver:
         )
         network.end_current_game(self.current_game)
 
+        self.current_game.led_strip.fill((0, 0, 0))
+        self.current_game.led_strip.show()
+
 
 if __name__ == "__main__":
     game_driver = Driver()
