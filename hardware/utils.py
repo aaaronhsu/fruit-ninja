@@ -29,6 +29,7 @@ class Coordinate:
 
         return led_position
 
+
 class Color:
     r: int
     g: int
@@ -41,8 +42,8 @@ class Color:
 
     def apply_to_led_strip(self, led_num: int, pixels) -> None:
         # TODO: applies color to led_num to pixels
-        # if 0 <= led_num <= 599:
         pixels[led_num] = (self.r, self.g, self.b)
+
 
 class ColorEnum(Enum):
     RED = Color(255, 0, 0)

@@ -1,22 +1,34 @@
-from __future__ import print_function
-import pixy
-from ctypes import *
-from pixy import *
+# from __future__ import print_function
+# import pixy
+# from ctypes import *
+# from pixy import *
 
 from typing import Dict
 
 from game_metadata import GameMetadata
 from utils import Color, Coordinate, Color
 
-def render(game_state: GameMetadata, cursor: Coordinate):
+
+def render(game_state: GameMetadata, cursor: Coordinate, debug=False):
+    if debug:
+        game_state.print_game_state(render_radius=True)
+        return
     leds_to_render: Dict[int, Color] = dict()
 
-    # iterate through all entities and map them to LED positions
-    # for entity in game_state.fruits + game_state.bombs:
-    #     leds_to_render.update(entity.map_to_display())
+    # add cursor path
+    for cursor in game_state.cursors:
+        cursor_led_id: int | None = cursor.convert_xy_to_linear()
+        if cursor_led_id:
+            leds_to_render.update({cursor_led_id: Color(100, 100, 100)})
 
-    # add white cursor
-    leds_to_render.update({cursor.convert_xy_to_linear(): Color(255, 255, 255)})
+    # iterate through all entities and map them to LED positions
+    for entity in game_state.fruits + game_state.bombs:
+        leds_to_render.update(entity.map_to_display())
+
+    # apply actual cursor position
+    cursor_led_id: int | None = cursor.convert_xy_to_linear()
+    if cursor_led_id:
+        leds_to_render.update({cursor_led_id: Color(255, 255, 255)})
 
     game_state.led_strip.fill((0, 0, 0)) # flush the LED strip
     for (led_num, color) in leds_to_render.items():
@@ -24,8 +36,11 @@ def render(game_state: GameMetadata, cursor: Coordinate):
 
     game_state.led_strip.show()
 
-def fetch_cursor() -> Coordinate:
+
+def fetch_cursor(debug=False) -> Coordinate:
     # Initialize Pixy2 if not already initialized
+    if debug:
+        return Coordinate(150, 100)  # Center position as default
     pixy.init()
     pixy.change_prog("color_connected_components")
 

@@ -1,8 +1,10 @@
 from abc import ABC, abstractmethod
 from typing import Dict
+import enum
 
 from utils import Coordinate, Color, ColorEnum
 import random
+from datetime import datetime
 
 GRAVITY = -5
 MAX_X = 300
@@ -13,6 +15,27 @@ MAX_X_VELOCITY = 8
 MIN_X_VELOCITY = 3
 MAX_Y_VELOCITY = 25
 MIN_Y_VELOCITY = 20
+
+class GameEvent(str, enum.Enum):
+    FRUIT_SLICED = 'FRUIT_SLICED'
+    BOMB_SLICED = 'BOMB_SLICED'
+    GAME_START = 'GAME_START'
+    GAME_END = 'GAME_END'
+
+class Event:
+    type: GameEvent
+    game_id: int
+    timestamp: float
+    metadata: dict
+
+    def __init__(
+        self,
+        type: GameEvent,
+        metadata: dict
+    ) -> None:
+        self.type = type
+        self.timestamp = datetime.now().timestamp()
+        self.metadata = metadata
 
 class Entity(ABC):
     position: Coordinate
@@ -40,7 +63,8 @@ class Entity(ABC):
 
                 if inEntity:
                     led_position = Coordinate(x_coord, y_coord).convert_xy_to_linear()
-                    leds[led_position] = self.color
+                    if led_position:
+                        leds[led_position] = self.color
         return leds
 
     def next_position(self):
@@ -50,6 +74,10 @@ class Entity(ABC):
         self.y_velocity += GRAVITY
 
         # print("fruit at", self.position.x, self.position.y, "velocity", self.y_velocity)
+
+    @abstractmethod
+    def handle_slice(self) -> Event | None:
+        pass
 
 
 class Fruit(Entity):
@@ -61,9 +89,13 @@ class Fruit(Entity):
         self.point_value = point_value
         self.color = ColorEnum.GREEN.value
 
-    def handle_slice(self) -> list:
-        #TODO: when sliced, returns two half fruits with opposite velocities
-        ...
+    def handle_slice(self) -> Event | None:
+        print("sliced fruit")
+        metadata = {
+            "points": self.point_value
+        }
+        return Event(GameEvent.FRUIT_SLICED, metadata)
+
 
 class Bomb(Entity):
     life_penalty: int
@@ -72,3 +104,10 @@ class Bomb(Entity):
         super().__init__()
         self.life_penalty = life_penalty
         self.color = ColorEnum.RED.value
+
+    def handle_slice(self) -> Event | None:
+        print("sliced bomb")
+        metadata = {
+            "lives": -self.life_penalty
+        }
+        return Event(GameEvent.BOMB_SLICED, metadata)

@@ -1,62 +1,39 @@
 import requests
 import json
 from datetime import datetime
-import enum
 
 from game_metadata import GameMetadata
 
-class GameEvent(str, enum.Enum):
-    FRUIT_SLICED = 'FRUIT_SLICED'
-    BOMB_SLICED = 'BOMB_SLICED'
-    GAME_START = 'GAME_START'
-    GAME_END = 'GAME_END'
 
+def post_events(events: list):
+    # Transform the events list into the expected payload format
+    payload = {
+        "events": [
+            {
+                "type": event.type,
+                "game_id": event.game_id,
+                "timestamp": datetime.fromtimestamp(event.timestamp).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                "metadata": event.metadata
+            }
+            for event in events
+        ]
+    }
 
-class Event:
-    type: GameEvent
-    game_id: int
-    timestamp: float
-    metadata: dict
+    # Make the POST request to the events endpoint
+    try:
+        response = requests.post(
+            "http://ec2-34-195-221-35.compute-1.amazonaws.com/api/events",
+            json=payload,
+            headers={"Content-Type": "application/json"}
+        )
 
-    def __init__(
-        self,
-        type: GameEvent,
-        metadata: dict
-    ) -> None:
-        self.type = type
-        self.timestamp = datetime.now().timestamp()
-        self.metadata = metadata
+        # Raise an exception for bad status codes
+        response.raise_for_status()
 
-    @staticmethod
-    def post_events(events: list):
-        # Transform the events list into the expected payload format
-        payload = {
-            "events": [
-                {
-                    "type": event.type,
-                    "game_id": event.game_id,
-                    "timestamp": datetime.fromtimestamp(event.timestamp).strftime("%Y-%m-%dT%H:%M:%SZ"),
-                    "metadata": event.metadata
-                }
-                for event in events
-            ]
-        }
-
-        # Make the POST request to the events endpoint
-        try:
-            response = requests.post(
-                "http://ec2-34-195-221-35.compute-1.amazonaws.com/api/events",
-                json=payload,
-                headers={"Content-Type": "application/json"}
-            )
-
-            # Raise an exception for bad status codes
-            response.raise_for_status()
-
-            return response.json()
-        except requests.exceptions.RequestException as e:
-            # Handle any errors that occur during the request
-            raise Exception(f"Failed to post events: {str(e)}")
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        # Handle any errors that occur during the request
+        raise Exception(f"Failed to post events: {str(e)}")
 
 
 def fetch_current_game() -> GameMetadata:
@@ -90,6 +67,7 @@ def fetch_current_game() -> GameMetadata:
         raise Exception(f"Failed to fetch current game: {str(e)}")
     except (KeyError, IndexError) as e:
         raise Exception(f"Invalid game data format: {str(e)}")
+
 
 def end_current_game(game_state: GameMetadata) -> None:
     # make end game request using the POST /api/end_game endpoint
