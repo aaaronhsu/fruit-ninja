@@ -5,13 +5,13 @@ from datetime import datetime
 from game_metadata import GameMetadata
 
 
-def post_events(events: list):
+def post_events(game_id: int, events: list):
     # Transform the events list into the expected payload format
     payload = {
         "events": [
             {
                 "type": event.type,
-                "game_id": event.game_id,
+                "game_id": game_id,
                 "timestamp": datetime.fromtimestamp(event.timestamp).strftime("%Y-%m-%dT%H:%M:%SZ"),
                 "metadata": event.metadata
             }
@@ -36,14 +36,15 @@ def post_events(events: list):
         raise Exception(f"Failed to post events: {str(e)}")
 
 
-def fetch_current_game() -> GameMetadata:
+def fetch_current_game() -> GameMetadata | None:
     # get and build current game info using the GET /api/current_game endpoint
     try:
         # Make GET request to the current game endpoint
         response = requests.get(
             "http://ec2-34-195-221-35.compute-1.amazonaws.com/api/current_game"
         )
-        response.raise_for_status()
+        if response.status_code == 404:
+            return None
 
         # Parse the response
         data = response.json()

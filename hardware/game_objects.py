@@ -76,7 +76,7 @@ class Entity(ABC):
         # print("fruit at", self.position.x, self.position.y, "velocity", self.y_velocity)
 
     @abstractmethod
-    def handle_slice(self) -> Event | None:
+    def handle_slice(self, current_game_state) -> Event | None:
         pass
 
 
@@ -89,11 +89,13 @@ class Fruit(Entity):
         self.point_value = point_value
         self.color = ColorEnum.GREEN.value
 
-    def handle_slice(self) -> Event | None:
+    def handle_slice(self, current_game_state) -> Event | None:
         print("sliced fruit")
         metadata = {
             "points": self.point_value
         }
+        current_game_state.num_points += self.point_value
+        current_game_state.fruits.remove(self)
         return Event(GameEvent.FRUIT_SLICED, metadata)
 
 
@@ -105,9 +107,11 @@ class Bomb(Entity):
         self.life_penalty = life_penalty
         self.color = ColorEnum.RED.value
 
-    def handle_slice(self) -> Event | None:
+    def handle_slice(self, current_game_state) -> Event | None:
         print("sliced bomb")
         metadata = {
             "lives": -self.life_penalty
         }
+        current_game_state.num_lives -= self.life_penalty
+        current_game_state.bombs.remove(self)
         return Event(GameEvent.BOMB_SLICED, metadata)

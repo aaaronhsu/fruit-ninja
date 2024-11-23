@@ -9,7 +9,7 @@ import utils
 
 from game_metadata import GameMetadata
 from utils import Coordinate
-from network import fetch_current_game
+import network
 
 FPS: int = 10
 FRAME_TIME: float = 1.0 / FPS  # Time per frame in seconds
@@ -25,10 +25,12 @@ class Driver:
 
     def blocking_start_game(self) -> None:
         """Blocks until a game is fetched from the server"""
-        self.current_game = fetch_current_game()
-        while not self.current_game:
-            self.current_game = fetch_current_game()
+        fetched_game: GameMetadata | None = network.fetch_current_game()
+        while not fetched_game:
+            fetched_game = network.fetch_current_game()
             time.sleep(1)
+            print("waiting for next game")
+        self.current_game = fetched_game
         self.next_frame_time = time.time()  # Initialize first frame time
 
     def wait_for_next_frame(self) -> None:
@@ -46,8 +48,20 @@ class Driver:
             time.sleep(sleep_time)
         self.next_frame_time += FRAME_TIME
 
+    def check_game_over(self) -> bool:
+        if self.current_game.frame_num / FPS > self.current_game.total_game_length:
+            return True  # game timeout
+        if self.current_game.num_lives == 0:
+            return True
+        return False
+
     def run_game(self) -> bool:
         """Run one frame of the game"""
+
+        # check game over state
+        if self.check_game_over():
+            return False
+
         cursor_position: Coordinate = hardware_io.fetch_cursor(debug=DEBUG)
 
         self.current_game = game_logic.calculate_next_game_state(
@@ -55,14 +69,24 @@ class Driver:
             cursor=cursor_position if not DEBUG else Coordinate(150, 100)
         )
 
+        if self.current_game.frame_num % 5 == 0:
+            network.post_events(
+                game_id=self.current_game.game_id,
+                events=self.current_game.events_to_post
+            )
+            self.current_game.events_to_post = []
+
         self.wait_for_next_frame()
         hardware_io.render(self.current_game, cursor_position, debug=DEBUG)
 
         return True
 
-    def end_game(self) -> GameMetadata:
-        # TODO: mark the game as over, clear current game and return it
-        ...
+    def end_game(self) -> None:
+        network.post_events(
+            game_id=self.current_game.game_id,
+            events=self.current_game.events_to_post
+        )
+        network.end_current_game(self.current_game)
 
 
 if __name__ == "__main__":
@@ -72,7 +96,10 @@ if __name__ == "__main__":
     game_driver.blocking_start_game()
 
     while True:
-        game_driver.run_game()
+        if not game_driver.run_game():
+            # end game
+            game_driver.end_game()
+            game_driver.blocking_start_game()
 
     # game: GameMetadata = GameMetadata(
     #     game_id=-1,

@@ -14,13 +14,13 @@ def spawn_bomb() -> Bomb:
     return Bomb(1)
 
 
-def handle_possible_collision(object: Entity, cursor: Coordinate) -> Event | None:
+def handle_possible_collision(current_state: GameMetadata, object: Entity, cursor: Coordinate) -> Event | None:
     def is_collision() -> bool:
         distance: float = ((object.position.x - cursor.x)**2 + (object.position.y - cursor.y)**2)**(0.5)
         return distance < object.radius
 
     if is_collision():
-        return object.handle_slice()
+        return object.handle_slice(current_state)
     return None
 
 
@@ -43,7 +43,7 @@ def calculate_next_game_state(current_state: GameMetadata, cursor: Coordinate) -
         entity.next_position()
 
         # handle collision event
-        sliced_event: Event | None = handle_possible_collision(entity, cursor)
+        sliced_event: Event | None = handle_possible_collision(next_game_state, entity, cursor)
         if sliced_event:
             next_game_state.events_to_post.append(sliced_event)
 
