@@ -3,8 +3,8 @@ from game_objects import Fruit, Bomb
 from utils import Coordinate
 from collections import deque
 
-# import board
-# import neopixel
+import board
+import neopixel
 
 class GameMetadata:
     fruits: list[Fruit]
@@ -36,7 +36,7 @@ class GameMetadata:
 
         self.events_to_post = []
 
-        # self.led_strip = neopixel.NeoPixel(board.D18, 600, auto_write=False)
+        self.led_strip = neopixel.NeoPixel(board.D18, 600, auto_write=False)
 
     def print_game_state(self, render_radius: bool = False):
         """
