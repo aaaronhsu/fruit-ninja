@@ -49,6 +49,11 @@ class Driver:
         self.next_frame_time += FRAME_TIME
 
     def check_game_over(self) -> bool:
+        polled_game = network.fetch_current_game()
+        if not polled_game:
+            return True
+        if polled_game.game_id != self.current_game.game_id:
+            return True
         if self.current_game.frame_num / FPS > self.current_game.total_game_length:
             return True  # game timeout
         if self.current_game.num_lives == 0:
