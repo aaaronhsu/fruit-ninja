@@ -55,11 +55,9 @@ def fetch_cursor(game_state: GameMetadata, debug=False) -> Coordinate:
         # Get the first detected object's position
         # blocks[0] contains the largest/most prominent detected object
         past_diffs = []
-        i = 0
-        for block in blocks:
+        for i in range(100):
             for cursor in game_state.cursors:
-                past_diffs[i] += ( ((cursor.x - block.m_x)**2  + (cursor.y - block.m_y)**2)**0.5 )
-            i += 1
+                past_diffs[i] += ( ((cursor.x - blocks[i].m_x)**2  + (cursor.y - blocks[i].m_y)**2)**0.5 )
         
         block_num = blocks.index(min(past_diffs))
 
