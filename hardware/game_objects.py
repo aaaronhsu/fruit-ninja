@@ -16,6 +16,13 @@ MIN_X_VELOCITY = 3
 MAX_Y_VELOCITY = 25
 MIN_Y_VELOCITY = 20
 
+
+import pygame
+
+pygame.mixer.init()
+fruit_slice_sound = pygame.mixer.Sound('./assets/fruit.wav')
+bomb_slice_sound = pygame.mixer.Sound('./assets/bomb.wav')
+
 class GameEvent(str, enum.Enum):
     FRUIT_SLICED = 'FRUIT_SLICED'
     BOMB_SLICED = 'BOMB_SLICED'
@@ -91,6 +98,7 @@ class Fruit(Entity):
 
     def handle_slice(self, current_game_state) -> Event | None:
         print("sliced fruit")
+        fruit_slice_sound.play()
         metadata = {
             "points": self.point_value
         }
@@ -109,6 +117,7 @@ class Bomb(Entity):
 
     def handle_slice(self, current_game_state) -> Event | None:
         print("sliced bomb")
+        bomb_slice_sound.play()
         metadata = {
             "lives": -self.life_penalty
         }
