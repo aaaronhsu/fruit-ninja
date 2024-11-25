@@ -96,6 +96,7 @@ class Fruit(Entity):
         super().__init__()
         self.point_value = point_value
         self.color = ColorEnum.GREEN.value
+        self.sliced = False
 
     def handle_slice(self, current_game_state) -> Event | None:
         if self.sliced:
