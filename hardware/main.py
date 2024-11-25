@@ -67,7 +67,7 @@ class Driver:
         if self.check_game_over():
             return False
 
-        cursor_position: Coordinate = hardware_io.fetch_cursor(debug=DEBUG)
+        cursor_position: Coordinate = hardware_io.fetch_cursor(self.current_game, debug=DEBUG)
 
         self.current_game = game_logic.calculate_next_game_state(
             current_state=self.current_game,
