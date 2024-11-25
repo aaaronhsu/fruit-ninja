@@ -59,7 +59,7 @@ def fetch_cursor(game_state: GameMetadata, debug=False) -> Coordinate:
             for cursor in game_state.cursors:
                 past_diffs[i] += ( ((cursor.x - blocks[i].m_x)**2  + (cursor.y - blocks[i].m_y)**2)**0.5 )
         
-        block_num = blocks.index(min(past_diffs))
+        block_num = past_diffs.index(min(past_diffs))
 
         x = blocks[block_num].m_x
         y = blocks[block_num].m_y
