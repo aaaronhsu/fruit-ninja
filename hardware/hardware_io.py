@@ -38,7 +38,7 @@ def render(game_state: GameMetadata, cursor: Coordinate, debug=False):
     game_state.led_strip.show()
 
 
-def fetch_cursor(debug=False) -> Coordinate:
+def fetch_cursor(game_state: GameMetadata, debug=False) -> Coordinate:
     # Initialize Pixy2 if not already initialized
     if debug:
         return Coordinate(150, 100)  # Center position as default
@@ -54,9 +54,17 @@ def fetch_cursor(debug=False) -> Coordinate:
     if count > 0:
         # Get the first detected object's position
         # blocks[0] contains the largest/most prominent detected object
-        x = blocks[0].m_x
-        y = blocks[0].m_y
+        past_diffs = []
 
+        for i in range(len(blocks)):
+            for cursor in game_state.cursors:
+                past_diffs[i] += ( ((cursor.x - blocks[i].m_x)**2  + (cursor.y - blocks[i].m_y)**2)**0.5 )
+        
+        block_num = blocks.index(min(past_diffs))
+        
+        x = blocks[block_num].m_x
+        y = blocks[block_num].m_y
+    
         # Normalize coordinates
         # Pixy2 resolution is 316x208
         normalized_x = x / 316.0  # Convert to 0-1 range
