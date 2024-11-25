@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Dict
 import enum
+import copy
 
 from utils import Coordinate, Color, ColorEnum
 import random
@@ -97,6 +98,8 @@ class Fruit(Entity):
         self.color = ColorEnum.GREEN.value
 
     def handle_slice(self, current_game_state) -> Event | None:
+        if self.sliced:
+            return None
         print("sliced fruit")
         fruit_slice_sound.play()
         metadata = {
@@ -104,6 +107,21 @@ class Fruit(Entity):
         }
         current_game_state.num_points += self.point_value
         current_game_state.fruits.remove(self)
+
+        piece1 = copy.deepcopy(self)
+        piece1.sliced = True
+        piece1.radius = 10
+        piece1.color = ColorEnum.BLUE.value
+        piece1.x_velocity = -self.x_velocity
+
+        piece2 = copy.deepcopy(self)
+        piece2.sliced = True
+        piece2.radius = 10
+        piece2.color = ColorEnum.BLUE.value
+
+        current_game_state.fruits.append(piece1)
+        current_game_state.fruits.append(piece2)
+
         return Event(GameEvent.FRUIT_SLICED, metadata)
 
 
