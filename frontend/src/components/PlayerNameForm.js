@@ -1,6 +1,8 @@
+// PlayerNameForm.js
 import React, { useState } from "react";
+import "../css/PlayerNameForm.css";
 
-function PlayerNameForm({ gameId, onSubmit, onClose }) {
+function PlayerNameForm({ gameId, onSubmit, onClose, finalScore }) {
   const [playerName, setPlayerName] = useState("");
 
   const handleSubmit = async (e) => {
@@ -25,7 +27,7 @@ function PlayerNameForm({ gameId, onSubmit, onClose }) {
         throw new Error("Failed to log game");
       }
 
-      onSubmit(); // Close the form and handle any parent component updates
+      onSubmit();
     } catch (error) {
       console.error("Error logging game:", error);
     }
@@ -34,20 +36,30 @@ function PlayerNameForm({ gameId, onSubmit, onClose }) {
   return (
     <div className="player-name-form-overlay">
       <div className="player-name-form">
-        <h2>Game Over!</h2>
-        <p>Submit your score with your name:</p>
+        <h2>🎉 Game Over! 🎉</h2>
+        <div className="final-score">
+          <span>Final Score</span>
+          <span className="score-value">{finalScore}</span>
+        </div>
         <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            value={playerName}
-            onChange={(e) => setPlayerName(e.target.value)}
-            placeholder="Enter your name"
-            required
-          />
+          <div className="input-group">
+            <label>Enter your name, ninja:</label>
+            <input
+              type="text"
+              value={playerName}
+              onChange={(e) => setPlayerName(e.target.value)}
+              placeholder="Your name here"
+              required
+              maxLength={20}
+              autoFocus
+            />
+          </div>
           <div className="form-buttons">
-            <button type="submit">Submit</button>
-            <button type="button" onClick={onClose}>
-              Skip
+            <button type="submit" className="submit-button">
+              Save Score 🏆
+            </button>
+            <button type="button" className="skip-button" onClick={onClose}>
+              Skip ⏭️
             </button>
           </div>
         </form>

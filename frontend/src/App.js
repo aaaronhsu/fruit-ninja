@@ -1,12 +1,9 @@
 import logo from "./logo.svg";
-import "./App.css";
+import "./css/App.css";
 import io from "socket.io-client";
-import CreateTableButton from "./components/CreateTableButton";
-import TestEventButton from "./components/TestEventButton";
 import React, { useEffect, useState } from "react";
 import StartGameButton from "./components/StartGameButton";
 import EndGameButton from "./components/EndGameButton";
-import ResetGameTableButton from "./components/ResetTableButton";
 import PlayerNameForm from "./components/PlayerNameForm";
 
 const socket = io("http://ec2-34-195-221-35.compute-1.amazonaws.com", {
@@ -94,13 +91,13 @@ function App() {
       case EVENT_TYPES.GAME_END:
         if (eventData.game_id === currentGameId) {
           setLastGameId(currentGameId);
-          setPoints(0);
-          setLives(0);
+          // Store the current points before resetting
           setGameLength(0);
           setIsGameActive(false);
           setCurrentGameId(null);
           setShowNameForm(true);
-          fetchLeaderboard(); // Update leaderboard when game ends
+          // Pass the final score to the form
+          fetchLeaderboard();
         }
         break;
 
@@ -182,50 +179,58 @@ function App() {
 
   return (
     <div className="App">
-      <h1>AHHHHH</h1>
-      <CreateTableButton />
-      <ResetGameTableButton />
-      <TestEventButton />
-      <StartGameButton />
-      <EndGameButton currentGameId={currentGameId} />
-
-      <div className="game-container">
-        <div className="game-stats">
-          <h2>Game Stats</h2>
-          <p>Game ID: {currentGameId || "No active game"}</p>
-          <p>Time Remaining: {gameLength} seconds</p>
-          <p>Points: {points}</p>
-          <p>Lives: {lives}</p>
-        </div>
-
-        <div className="leaderboard">
-          <h2>Leaderboard</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Rank</th>
-                <th>Player</th>
-                <th>Points</th>
-                <th>Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {leaderboard.map((game, index) => (
-                <tr key={game.gameId}>
-                  <td>{index + 1}</td>
-                  <td>{game.playerName}</td>
-                  <td>{game.points}</td>
-                  <td>{game.startTime}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      <div className="game-header">
+        <h1>🍉 Fruit Ninja Scoreboard 🍎</h1>
       </div>
 
-      <div className="raw-data">
-        <h3>Last Event Data:</h3>
-        {data && <div>{JSON.stringify(data)}</div>}
+      <div className="game-container">
+        <div className="control-panel">
+          <div className="game-controls">
+            <StartGameButton />
+            <EndGameButton currentGameId={currentGameId} />
+          </div>
+
+          <div className="game-stats">
+            <div className="stat-box">
+              <span className="stat-label">Time</span>
+              <span className="stat-value">{gameLength}s</span>
+            </div>
+            <div className="stat-box">
+              <span className="stat-label">Score</span>
+              <span className="stat-value">{points}</span>
+            </div>
+            <div className="stat-box">
+              <span className="stat-label">Lives</span>
+              <span className="stat-value">{"🍎".repeat(lives)}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="leaderboard-container">
+          <h2>🏆 High Scores 🏆</h2>
+          <div className="leaderboard-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Ninja</th>
+                  <th>Score</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {leaderboard.map((game, index) => (
+                  <tr key={game.gameId}>
+                    <td>{index + 1}</td>
+                    <td>{game.playerName}</td>
+                    <td>{game.points}</td>
+                    <td>{new Date(game.startTime).toLocaleDateString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
 
       {showNameForm && (
@@ -233,6 +238,7 @@ function App() {
           gameId={lastGameId}
           onSubmit={handleNameFormSubmit}
           onClose={handleNameFormClose}
+          finalScore={points}
         />
       )}
     </div>
