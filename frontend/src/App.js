@@ -25,6 +25,7 @@ function App() {
   const [points, setPoints] = useState(0);
   const [lives, setLives] = useState(0);
   const [gameLength, setGameLength] = useState(0);
+  const [isGameActive, setIsGameActive] = useState(false);
 
   const handleGameEvent = (eventData) => {
     console.log("Received game_event:", eventData);
@@ -47,8 +48,9 @@ function App() {
         if (eventData.metadata && eventData.metadata.game_data) {
           const { lives, game_length } = eventData.metadata.game_data;
           setLives(lives);
-          setGameLength(game_length);
+          setGameLength(Math.floor(game_length / 10)); // Convert frames to seconds
           setPoints(0);
+          setIsGameActive(true);
         }
         break;
 
@@ -57,12 +59,36 @@ function App() {
         setPoints(0);
         setLives(0);
         setGameLength(0);
+        setIsGameActive(false);
         break;
 
       default:
         console.log("Unknown event type:", eventData.type);
     }
   };
+
+  // Countdown timer effect
+  useEffect(() => {
+    let timer;
+    if (isGameActive && gameLength > 0) {
+      timer = setInterval(() => {
+        setGameLength((prevLength) => {
+          if (prevLength <= 1) {
+            clearInterval(timer);
+            setIsGameActive(false);
+            return 0;
+          }
+          return prevLength - 1;
+        });
+      }, 1000);
+    }
+
+    return () => {
+      if (timer) {
+        clearInterval(timer);
+      }
+    };
+  }, [isGameActive, gameLength]);
 
   useEffect(() => {
     socket.on("connect", () => {
@@ -107,7 +133,7 @@ function App() {
 
       <div className="game-stats">
         <h2>Game Stats</h2>
-        <p>Game Length: {gameLength}</p>
+        <p>Time Remaining: {gameLength} seconds</p>
         <p>Points: {points}</p>
         <p>Lives: {lives}</p>
       </div>
