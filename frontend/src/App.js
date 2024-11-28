@@ -2,8 +2,11 @@ import logo from "./logo.svg";
 import "./App.css";
 import io from "socket.io-client";
 import CreateTableButton from "./components/CreateTableButton";
-import UpdatePointButton from "./components/UpdatePointButton";
+import TestEventButton from "./components/TestEventButton";
 import React, { useEffect, useState } from "react";
+import StartGameButton from "./components/StartGameButton";
+import EndGameButton from "./components/EndGameButton";
+import ResetGameTableButton from "./components/ResetTableButton";
 
 const socket = io("http://ec2-34-195-221-35.compute-1.amazonaws.com", {
   transports: ["websocket"],
@@ -37,13 +40,13 @@ function App() {
       console.error("Reconnection failed");
     });
 
-    socket.on("point_update", (data) => {
-      console.log("Received point update:", data);
+    socket.on("game_event", (data) => {
+      console.log("Received game_event:", data);
       setData(data);
     });
 
     return () => {
-      socket.off("point_update");
+      socket.off("game_event");
     };
   }, []);
 
@@ -51,8 +54,12 @@ function App() {
     <div className="App">
       <h1>AHHHHH</h1>
       <CreateTableButton />
+      <ResetGameTableButton />
 
-      <UpdatePointButton />
+      <TestEventButton />
+
+      <StartGameButton />
+      <EndGameButton />
       {data && <div>{JSON.stringify(data)}</div>}
     </div>
   );

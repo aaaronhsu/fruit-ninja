@@ -1,9 +1,9 @@
 import React from "react";
 
-function CreateTableButton() {
+function ResetGameTableButton() {
   const handleClick = () => {
     fetch(
-      "http://ec2-34-195-221-35.compute-1.amazonaws.com/api/init_game_table",
+      "http://ec2-34-195-221-35.compute-1.amazonaws.com/api/reset_game_table",
       {
         method: "POST",
         headers: {
@@ -25,7 +25,7 @@ function CreateTableButton() {
       });
   };
 
-  return <button onClick={handleClick}>Create Table</button>;
+  return <button onClick={handleClick}>Reset Game Table</button>;
 }
 
-export default CreateTableButton;
+export default ResetGameTableButton;

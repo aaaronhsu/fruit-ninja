@@ -2,12 +2,15 @@ import React from "react";
 
 function CreateTableButton() {
   const handleClick = () => {
-    fetch("http://ec2-34-195-221-35.compute-1.amazonaws.com/api/create_table", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    fetch(
+      "http://ec2-34-195-221-35.compute-1.amazonaws.com/api/init_game_table",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
       },
-    })
+    )
       .then((response) => {
         if (response.ok) {
           return response.json();

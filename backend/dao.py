@@ -45,14 +45,22 @@ def update_lives(game_id, lives):
                 WHERE id = %s;
             """, (lives, game_id))
 
-def end_game(game_id):
+def end_game(game_id=None):
     with conn:
         with conn.cursor() as cursor:
-            cursor.execute("""
-                UPDATE games
-                SET end_time = CURRENT_TIMESTAMP
-                WHERE id = %s;
-            """, (game_id,))
+            if game_id:
+                cursor.execute("""
+                    UPDATE games
+                    SET end_time = CURRENT_TIMESTAMP
+                    WHERE id = %s;
+                """, (game_id,))
+            else:
+                cursor.execute("""
+                    UPDATE games
+                    SET end_time = CURRENT_TIMESTAMP
+                    WHERE end_time IS NULL;
+                """)
+
 
 
 # ---------------------- GAME MANAGEMENT ----------------------

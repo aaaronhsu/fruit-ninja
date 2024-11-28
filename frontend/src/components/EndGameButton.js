@@ -1,12 +1,13 @@
 import React from "react";
 
-function UpdatePointButton() {
+function EndGameButton() {
   const handleClick = () => {
-    fetch("http://ec2-34-195-221-35.compute-1.amazonaws.com/api/socket_test", {
+    fetch("http://ec2-34-195-221-35.compute-1.amazonaws.com/api/end_game", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify({}),
     })
       .then((response) => {
         if (response.ok) {
@@ -22,7 +23,7 @@ function UpdatePointButton() {
       });
   };
 
-  return <button onClick={handleClick}>Update Points</button>;
+  return <button onClick={handleClick}>End Game</button>;
 }
 
-export default UpdatePointButton;
+export default EndGameButton;
