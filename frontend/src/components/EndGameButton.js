@@ -1,29 +1,37 @@
 import React from "react";
 
-function EndGameButton() {
-  const handleClick = () => {
-    fetch("http://ec2-34-195-221-35.compute-1.amazonaws.com/api/end_game", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({}),
-    })
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error("Network response was not ok.");
-      })
-      .then((data) => {
-        console.log("Success:", data);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+function EndGameButton({ currentGameId }) {
+  const handleEndGame = async () => {
+    if (!currentGameId) {
+      console.log("No active game to end");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        "http://ec2-34-195-221-35.compute-1.amazonaws.com/api/end_game",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ game_id: currentGameId }),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to end game");
+      }
+    } catch (error) {
+      console.error("Error ending game:", error);
+    }
   };
 
-  return <button onClick={handleClick}>End Game</button>;
+  return (
+    <button onClick={handleEndGame} disabled={!currentGameId}>
+      End Game
+    </button>
+  );
 }
 
 export default EndGameButton;

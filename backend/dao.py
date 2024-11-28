@@ -98,5 +98,10 @@ def fetch_games():
 def fetch_leaderboard():
     with conn:
         with conn.cursor() as cursor:
-            cursor.execute("SELECT * FROM games ORDER BY points DESC LIMIT 10;")
+            cursor.execute("""
+                SELECT * FROM games
+                WHERE end_time IS NOT NULL
+                ORDER BY points DESC
+                LIMIT 10;
+            """)
             return cursor.fetchall()
