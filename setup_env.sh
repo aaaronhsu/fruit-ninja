@@ -1,3 +1,4 @@
+#!/bin/bash
 source fruit_ninja/bin/activate
 export NODE_OPTIONS=--openssl-legacy-provider
 export FLASK_RUN_PORT=8000

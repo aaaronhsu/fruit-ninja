@@ -2,3 +2,4 @@
 *.env
 fruit_ninja/
 .ropeproject/
+.DS_Store
