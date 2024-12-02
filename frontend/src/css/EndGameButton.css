@@ -1,0 +1,21 @@
+/* EndGameButton.css */
+.end-button {
+  background-color: #ff6b6b;
+  color: white;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.end-button:hover:not(.disabled) {
+  transform: translateY(-2px);
+  background-color: #ff5252;
+}
+
+.end-button.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

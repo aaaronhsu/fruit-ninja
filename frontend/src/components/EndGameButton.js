@@ -1,4 +1,6 @@
+// EndGameButton.js
 import React from "react";
+import "../css/EndGameButton.css";
 
 function EndGameButton({ currentGameId }) {
   const handleEndGame = async () => {
@@ -28,8 +30,12 @@ function EndGameButton({ currentGameId }) {
   };
 
   return (
-    <button onClick={handleEndGame} disabled={!currentGameId}>
-      End Game
+    <button
+      className={`end-button ${!currentGameId ? "disabled" : ""}`}
+      onClick={handleEndGame}
+      disabled={!currentGameId}
+    >
+      🛑 End Game
     </button>
   );
 }
