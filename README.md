@@ -9,6 +9,6 @@ A physical implementation of Fruit Ninja using IoT hardware. The game is rendere
 - Speakers
 
 ## Infrastructure
-The game logic is implemented directly on the Raspberry Pi. Game events are sent to a  Flask server hosted on AWS, which are logged in Postgres and are forwarded to a React frontend via Websockets.
+The game logic is implemented directly on the Raspberry Pi. Game events are sent to a Flask server hosted on AWS, which are logged in Postgres and forwarded to a React frontend via Websockets.
 
 ![Logo](./images/fruit_ninja_infra.png)
