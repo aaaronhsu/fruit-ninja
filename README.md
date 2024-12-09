@@ -34,12 +34,6 @@ The game logic is implemented directly on the Raspberry Pi. Game events are sent
 └── hardware/     # Raspberry Pi game logic and I/O
 ```
 
-## Setup Instructions
-
-1. Clone the repository
-2. Each directory can be run independently
-3. Follow setup instructions in respective component directories
-
 ## API Endpoints
 
 - `POST /api/init_game_table`
